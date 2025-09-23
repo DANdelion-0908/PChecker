@@ -16,7 +16,6 @@ class MCPClient:
         self.session: Optional[ClientSession] = None
         self.exit_stack = AsyncExitStack()
         self.anthropic = Anthropic()
-    # methods will go here
 
     async def connect_to_server(self, server_script_path: str):
         """Connect to an MCP server
@@ -54,6 +53,7 @@ class MCPClient:
         if self.session is None:
             raise RuntimeError("Session is not initialized. Please connect to the server first.")
 
+        # Historial de mensajes
         messages = [
             {
                 "role": "user",
@@ -61,6 +61,7 @@ class MCPClient:
             }
         ]
 
+        # Listar herramientas disponibles en el servidor
         response = await self.session.list_tools()
         available_tools = [{
             "name": tool.name,
@@ -68,57 +69,47 @@ class MCPClient:
             "input_schema": tool.inputSchema
         } for tool in response.tools]
 
-        # Initial Claude API call
-        response = self.anthropic.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=1000,
-            messages=messages,
-            tools=available_tools
-        )
-
-        # Process response and handle tool calls
         final_text = []
 
-        assistant_message_content = []
-        for content in response.content:
-            if content.type == 'text':
-                final_text.append(content.text)
-                assistant_message_content.append(content)
-            elif content.type == 'tool_use':
-                tool_name = content.name
-                tool_args = content.input
+        # Bucle hasta que Claude ya no pida más herramientas
+        while True:
+            response = self.anthropic.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=1000,
+                messages=messages,
+                tools=available_tools
+            )
 
-                # Execute tool call
-                result = await self.session.call_tool(tool_name, tool_args)
-                final_text.append(f"[Calling tool {tool_name} with args {tool_args}]")
+            tool_called = False
 
-                assistant_message_content.append(content)
-                messages.append({
-                    "role": "assistant",
-                    "content": assistant_message_content
-                })
-                messages.append({
-                    "role": "user",
-                    "content": [
-                        {
+            for block in response.content:
+                if block.type == "text":
+                    final_text.append(block.text)
+
+                elif block.type == "tool_use":
+                    tool_called = True
+                    tool_name = block.name
+                    tool_args = block.input
+
+                    # Ejecutar herramienta
+                    result = await self.session.call_tool(tool_name, tool_args)
+
+                    # Guardar en historial
+                    messages.append({"role": "assistant", "content": [block]})
+                    messages.append({
+                        "role": "user",
+                        "content": [{
                             "type": "tool_result",
-                            "tool_use_id": content.id,
+                            "tool_use_id": block.id,
                             "content": result.content
-                        }
-                    ]
-                })
+                        }]
+                    })
 
-                # Get next response from Claude
-                response = self.anthropic.messages.create(
-                    model="claude-sonnet-4-20250514",
-                    max_tokens=1000,
-                    messages=messages,
-                    tools=available_tools
-                )
-
-                final_text.append(response.content[0].text)
+            if not tool_called:
+                break  # si no pidió otra herramienta, terminó
 
         return "\n".join(final_text)
+
     
     async def chat_loop(self):
         """Run an interactive chat loop"""
