@@ -1,6 +1,8 @@
 import pandas as pd
 from mcp.server import FastMCP
 import os
+from pathlib import Path
+import subprocess
 
 mcp = FastMCP("pc_builder")
 
@@ -141,6 +143,37 @@ async def write_file(path: str, content: str) -> str:
         return "File written successfully"
     except Exception as e:
         return f"Error: {e}"
+
+@mcp.tool()
+async def github_clone_repo(repo_url: str, local_path: str = None) -> str:
+    """Clonar un repositorio de GitHub"""
+    try:
+        if local_path is None:
+            local_path = Path(__file__).parent / "repos" / repo_url.split("/")[-1].replace(".git", "")
+        
+        local_path = Path(local_path)
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        result = subprocess.run(
+            ["git", "clone", repo_url, str(local_path)],
+            capture_output=True, text=True, check=True
+        )
+        return f"Repositorio clonado en: {local_path}"
+    except subprocess.CalledProcessError as e:
+        return f"Error al clonar: {e.stderr}"
+    
+@mcp.tool()
+async def github_create_repo(name: str, description: str = "", private: bool = False) -> str:
+    """Crear un nuevo repositorio en GitHub (requiere GitHub CLI o API token)"""
+    try:
+        private_flag = "--private" if private else "--public"
+        result = subprocess.run(
+            ["gh", "repo", "create", name, "--description", description, private_flag],
+            capture_output=True, text=True, check=True
+        )
+        return f"Repositorio creado: {name}"
+    except subprocess.CalledProcessError as e:
+        return f"Error al crear repositorio: {e.stderr}"
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
