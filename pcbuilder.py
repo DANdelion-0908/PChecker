@@ -8,6 +8,11 @@ cpus = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/c
 gpus = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/video-card.csv")
 motherboards = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/motherboard.csv")
 rams = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/memory.csv")
+cases = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/case.csv")
+hardDrives = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/internal-hard-drive.csv")
+keyboards = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/keyboard.csv")
+mice = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/mouse.csv")
+psus = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/power-supply.csv")
 
 @mcp.tool()
 async def search_cpu(max_price: float = 9999, min_cores: int = 1) -> list[dict]:
@@ -41,6 +46,32 @@ async def search_ram(max_price: float = 9999, min_capacity: int = 8) -> list[dic
     results = rams[
         (rams["price"] <= max_price) & 
         (rams["capacity"] >= min_capacity)
+    ]
+    return results.to_dict(orient="records")[:10]
+
+@mcp.tool()
+async def search_case(max_price: float = 9999, form_factor: str = None):
+    """Search cases by price and form factor"""
+    df = cases[cases["price"] <= max_price]
+    if form_factor:
+        df = df[df["type"].str.contains(form_factor, na=False)]
+    return df.to_dict(orient="records")[:10]
+
+@mcp.tool()
+async def search_psu(max_price: float = 9999, min_wattage: int = 400) -> list[dict]:
+    """Search power supplies by price and wattage"""
+    results = psus[
+        (psus["price"] <= max_price) &
+        (psus["wattage"] >= min_wattage)
+    ]
+    return results.to_dict(orient="records")[:10]
+
+@mcp.tool()
+async def search_storage(max_price: float = 9999, min_capacity: int = 256) -> list[dict]:
+    """Search hard drives/SSDs by price and capacity (GB)"""
+    results = hardDrives[
+        (hardDrives["price"] <= max_price) &
+        (hardDrives["capacity"] >= min_capacity)
     ]
     return results.to_dict(orient="records")[:10]
 
