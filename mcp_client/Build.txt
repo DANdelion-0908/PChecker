@@ -1,0 +1,95 @@
+CONFIGURACIÓN DE PC MÁS CARA
+
+COMPONENTES PRINCIPALES:
+=======================
+
+CPU: AMD Ryzen 9 9950X3D
+- Precio: $649.99
+- 16 núcleos
+- Frecuencia base: 4.3 GHz
+- Frecuencia boost: 5.7 GHz
+- Arquitectura: Zen 5
+- TDP: 170W
+
+GPU: Asus ROG Astral OC GeForce RTX 5090
+- Precio: $3,359.99
+- 32GB VRAM
+- Frecuencia base: 2010 MHz
+- Frecuencia boost: 2610 MHz
+- Color: Negro/Plateado
+
+MOTHERBOARD: Gigabyte X870E AORUS ELITE WIFI7
+- Precio: $325.31
+- Socket: AM5
+- Factor de forma: ATX
+- Memoria máxima: 256GB
+- Slots de memoria: 4
+- Color: Negro
+
+RAM: G.Skill Trident Z5 RGB 64GB
+- Precio: $234.99
+- Velocidad: 6400 MHz
+- Módulos: 2x32GB
+- Latencia CAS: 32
+- Color: Negro/Plateado
+
+ALMACENAMIENTO: Samsung 9100 PRO 4TB
+- Precio: $429.99
+- Capacidad: 4TB
+- Tipo: SSD M.2 NVMe
+- Interfaz: PCIe 5.0 x4
+- Caché: 4096MB
+
+FUENTE DE PODER: Corsair SF1000 (2024)
+- Precio: $239.99
+- Potencia: 1000W
+- Eficiencia: Platinum
+- Factor de forma: SFX
+- Modular: Totalmente modular
+
+CASE: Lian Li O11 VISION COMPACT
+- Precio: $124.99
+- Tipo: ATX Mid Tower
+- Color: Blanco
+- Panel lateral: Cristal templado
+- Volumen externo: 57.4L
+
+MONITOR: LG 65EP5G-B
+- Precio: $9,333.00
+- Tamaño: 65"
+- Resolución: 4K (3840x2160)
+- Frecuencia de refresco: 120Hz
+- Tipo de panel: OLED
+
+PERIFÉRICOS:
+============
+
+TECLADO: Microsoft WTA-00001
+- Precio: $909.36
+- Tipo: Ergonómico
+- Conexión: Inalámbrica
+- Color: Negro/Plateado
+
+MOUSE: Logitech G500s Laser Gaming Mouse
+- Precio: $499.00
+- Método de seguimiento: Láser
+- DPI máximo: 8,200
+- Conexión: Cableada
+- Color: Negro/Plateado
+
+PRECIO TOTAL DE LA CONFIGURACIÓN:
+================================
+CPU: $649.99
+GPU: $3,359.99
+Motherboard: $325.31
+RAM: $234.99
+Almacenamiento: $429.99
+Fuente de poder: $239.99
+Case: $124.99
+Monitor: $9,333.00
+Teclado: $909.36
+Mouse: $499.00
+
+TOTAL: $16,106.61
+
+Esta configuración representa lo más premium disponible en cada categoría, ofreciendo el máximo rendimiento para gaming, creación de contenido profesional y tareas exigentes. El monitor OLED de 65" es especialmente destacable como un componente de lujo para una experiencia visual excepcional.
