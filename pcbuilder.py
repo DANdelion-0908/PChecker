@@ -1,5 +1,6 @@
 import pandas as pd
 from mcp.server import FastMCP
+from mcp
 
 mcp = FastMCP("pc_builder")
 
@@ -13,6 +14,7 @@ hardDrives = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB
 keyboards = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/keyboard.csv")
 mice = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/mouse.csv")
 psus = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/power-supply.csv")
+monitors = pd.read_csv("/home/dandelion/Documentos/Redes/Proyectos/PChecker/DB/csv/monitor.csv")
 
 @mcp.tool()
 async def search_cpu(max_price: float = 9999, min_cores: int = 1) -> list[dict]:
@@ -43,11 +45,22 @@ async def search_motherboard(socket: str = None, max_price: float = 9999) -> lis
 @mcp.tool()
 async def search_ram(max_price: float = 9999, min_capacity: int = 8) -> list[dict]:
     """Search RAM kits filtered by price and capacity."""
-    results = rams[
-        (rams["price"] <= max_price) & 
-        (rams["capacity"] >= min_capacity)
-    ]
+    
+    # Crear una columna temporal con capacidad total en GB
+    def total_capacity(modules_str):
+        try:
+            num_modules, size_per_module = map(int, modules_str.split(","))
+            return num_modules * size_per_module
+        except:
+            return 0  # si hay algún error, ignorar
+     
+    rams["total_capacity"] = rams["modules"].apply(total_capacity)
+    
+    # Filtrar por precio y capacidad
+    results = rams[(rams["price"] <= max_price) & (rams["total_capacity"] >= min_capacity)]
+    
     return results.to_dict(orient="records")[:10]
+
 
 @mcp.tool()
 async def search_case(max_price: float = 9999, form_factor: str = None):
@@ -73,6 +86,33 @@ async def search_storage(max_price: float = 9999, min_capacity: int = 256) -> li
         (hardDrives["price"] <= max_price) &
         (hardDrives["capacity"] >= min_capacity)
     ]
+    return results.to_dict(orient="records")[:10]
+
+@mcp.tool()
+async def search_keyboard(max_price: float = 9999, tks: bool = False) -> list[dict]:
+    """Search keyboards by price and if is TKS (ten key less) or not"""
+    df = keyboards[keyboards["price"] <= max_price]
+    if tks:
+        df = df[df["tenkeyless"] == True]
+    return df.to_dict(orient="records")[:10]
+
+@mcp.tool()
+async def search_mouse(max_price: float = 9999, connection_type: str = None) -> list[dict]:
+    """Search mice by price and connection type"""
+    df = mice[mice["price"] <= max_price]
+    if connection_type:
+        df = df[df["connection_type"].str.contains(connection_type, na=False)]
+    return df.to_dict(orient="records")[:10]
+
+@mcp.tool()
+async def search_monitor(max_price: float = 9999, min_size: float = 15, resolution: str = None) -> list[dict]:
+    """Search monitor by price, size and resolution"""
+    results = monitors[
+        (monitors["price"] <= max_price) &
+        (monitors["screen_size"] >= min_size)
+    ]
+    if resolution:
+        results = results[results["resolution"].str.contains(resolution, na=False)]
     return results.to_dict(orient="records")[:10]
 
 if __name__ == "__main__":
