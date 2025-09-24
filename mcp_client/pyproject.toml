@@ -6,7 +6,8 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.68.0",
-    "mcp>=1.14.1",
+    "gitpython>=3.1.45",
+    "mcp[filesystem,git]>=1.14.1",
     "pandas>=2.3.2",
     "python-dotenv>=1.1.1",
 ]

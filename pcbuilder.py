@@ -1,6 +1,5 @@
 import pandas as pd
 from mcp.server import FastMCP
-from mcp
 
 mcp = FastMCP("pc_builder")
 
