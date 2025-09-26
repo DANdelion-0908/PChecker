@@ -1,8 +1,8 @@
 # PChecker
 
-Proyecto que busca asesorar al usuario a construir una PC desde cualquier punto teniendo en cuenta parámetros como precio, presupuesto, capacidad, compatibilidad, etc.
+Project aimed at assisting users in building a PC from any starting point, taking into account parameters such as price, budget, capacity, compatibility, and more.
 
-## Scripts de instalación
+## Installation Scripts
 
 ### Linux
 
@@ -22,8 +22,7 @@ source .venv/bin/activate
 uv add mcp anthropic python-dotenv
 ```
 
-### Windows
-
+Windows
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 
@@ -39,8 +38,7 @@ uv venv
 uv add mcp anthropic python-dotenv
 ```
 
-## Ejecución
-
+## Execution
 ```bash
 # Weather MCP Server
 uv run client.py ../weather.py
@@ -49,4 +47,6 @@ uv run client.py ../weather.py
 uv run client.py ../pcbuilder.py
 ```
 
-A partir de este punto, el programa solicitará querys a través de la terminal que serán utilizados por el modelo Claude 4 para analizar el conjunto de datos obtenido de [pc-part-dataset](https://github.com/docyx/pc-part-dataset.git) y que contiene cerca de 67,000 registros con información sobre múltiples componentes de computadora.
+From this point on, the program will request queries through the terminal, which will be processed by the Claude 4 model to analyze the dataset obtained from pc-part-dataset
+.
+This dataset contains around 67,000 records with information about multiple computer components.
